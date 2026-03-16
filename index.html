@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <head>
+        <title>Registration Form</title>
+        <link rel="stylesheet" type  = "text/css" href="./style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    </head>
+    <body>
+    <header>
+        <h1>Registration Page</h1>
+
+    </header>
+        <div id = "MainContainer">
+
+        <!-- Form Section -->
+            <div id = "RegForm">
+                <form id="RegistrationForm">
+                    <h2>Registration Form</h2>
+
+                    <!-- <div class="FormGroup">-->
+                        <label>Full Name</label>
+                        <input type="text" id="FullName" class = "InputFields">
+                    <!--</div>-->
+
+                    <!--<div class="FormGroup">-->
+                        <label>Email</label>
+                        <input type="email" id="EmailAddress" class = "InputFields">
+                    <!--</div>-->
+
+                    <!--<div class="FormGroup">-->
+                        <label>Phone</label>
+                        <input type="phone" id="PhoneNumber" pattern="[0-9+]+" required class = "InputFields">
+                    <!--</div>-->
+
+                    <div class="FormGroup">
+                        <label>Gender:</label>
+                        <label>
+                            <input type="radio" name="gender" value="Male"> Male
+                        </label>
+
+                        <label>
+                            <input type="radio" name="gender" value="Female"> Female
+                        </label>
+
+                        <label>
+                            <input type="radio" name="gender" value="Other"> Other
+                        </label>
+                   </div>
+
+                    <button type="submit" id ="SubmitButton">
+                    Submit
+                    </button>
+                </form>
+            </div>
+ <!-- Table Section -->
+            <div id="RegTable">
+                <h2>Registered Users</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th id="ActionTh">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="TableBody">
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <script src="./script.js"></script>
+    </body>
+</html>

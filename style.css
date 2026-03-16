@@ -1,0 +1,193 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    width: 100%;
+}
+
+Header {
+    background-color: #deec7b;
+    color: rgb(11, 15, 7);
+    padding: 10px;
+    text-align: center;
+    
+}
+
+
+#MainContainer
+{
+    display:flex;
+    gap:30px;
+    margin: 1% 1% 0;
+}
+
+/* FORM */
+
+#RegForm
+{
+    width:35%;
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    margin-left: 5px;
+}
+
+h2{
+    margin-top: 0; 
+}
+
+
+label
+{
+    display:block;
+    margin-bottom:5px;
+    
+}
+
+.InputFields{
+    width:90%;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    margin-bottom: 10px;
+}
+
+button
+{
+    padding:10px 25px;
+    border:none;
+    background:#007bff;
+    color:white;
+    border-radius:4px;
+    cursor:pointer;
+    margin-top: 10px;
+    display:block ;
+}
+
+
+button:hover
+{
+    background:#0056b3;
+}
+
+/* TABLE */
+
+#RegTable
+{
+    width:65%;
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+table
+{
+    width:100%;
+    border-collapse:collapse;
+}
+
+
+th, td
+{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th
+{
+    background:#f1f1f1;
+    text-align: left;
+}
+#ActionTh{
+    text-align: center;
+}
+
+
+.EditingRow
+{
+    background:#fff3cd;
+}
+.ActionColumn{
+    text-align: center;
+}
+.ActionButton
+{
+    padding:6px 10px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.EditButton
+{
+    background:#28a745;
+    color:white;
+}
+
+.DeleteButton
+{
+    background:#dc3545;
+    color:white;
+}
+
+/* For Mobiles or iPads */
+@media screen and ( max-width:900px ) {
+
+
+Header {
+    text-align: left;
+}
+
+#MainContainer
+{
+    display:block;
+    margin: 10px;
+}
+
+/* FORM */
+
+#RegForm
+{
+    width:96%;
+    background:white;
+    padding: 5px 5px 10px;
+    margin: 0px 10px 10px;
+    
+}
+
+form{
+    margin-left: 5px;
+}
+
+.InputFields{
+    width:97%;
+}
+
+.FormGroup label{
+ display:inline;
+
+}
+
+/* TABLE */
+
+#RegTable
+{
+    width:96%;
+    padding:5px;
+    margin: 10px;
+
+}
+
+table
+{
+    width:98%;
+    margin: 5px;
+}
+    
+}
