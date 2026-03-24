@@ -13,6 +13,8 @@
         <h1>Registration Page</h1>
 
     </header>
+    <button onclick="generateAIData()" class="AIBtn">Generate Data (AI)</button>
+    <pre id="output"></pre>
         <div id = "MainContainer">
 
         <!-- Form Section -->
@@ -74,6 +76,22 @@
                     </tbody>
                 </table>
 
+                <input type="text" id="SearchInput" placeholder="Search...">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><button onclick="sortTable(0)" class="sortbtn">Name</button></th>
+                                <th><button onclick="sortTable(1)" class="sortbtn">Email</button></th>
+                                <th><button onclick="sortTable(2)" class="sortbtn">Phone</button></th>
+                                <th><button onclick="sortTable(3)" class="sortbtn">Gender</button></th>
+                                <th><button onclick="" class="sortbtn">Actions</button></th>
+                            </tr>
+                        </thead>
+                        <tbody id="TableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
