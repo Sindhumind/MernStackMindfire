@@ -66,11 +66,38 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><button onclick="sortTable(0)" class="sortbtn">Name</button></th>
-                                <th><button onclick="sortTable(1)" class="sortbtn">Email</button></th>
-                                <th><button onclick="sortTable(2)" class="sortbtn">Phone</button></th>
-                                <th><button onclick="sortTable(3)" class="sortbtn">Gender</button></th>
-                                <th><button onclick="" class="sortbtn">Actions</button></th>
+                                <th>
+                                    Name
+                                    <span class="sort-container">
+                                    <i id="asc-0" class="fa fa-sort-up sort-icon" onclick="sortTable(0, 'asc')" style="line-height: 0.4;"></i>
+                                    <i id="desc-0" class="fa fa-sort-down sort-icon" onclick="sortTable(0, 'desc')" style="line-height: 0.4;"></i>
+                                    </span>
+                                </th>
+
+                                <th>
+                                Email
+                                <span class="sort-container">
+                                <i id="asc-1" class="fa fa-sort-up sort-icon" onclick="sortTable(1, 'asc')" style="line-height: 0.4;"></i>
+                                <i id="desc-1" class="fa fa-sort-down sort-icon" onclick="sortTable(1, 'desc')" style="line-height: 0.4;"></i>
+                                </span>
+                                </th>
+
+                                <th>
+                                Phone
+                                <span class="sort-container"></i>
+                                <i id="asc-2" class="fa fa-sort-up sort-icon" onclick="sortTable(2, 'asc')" style="line-height: 0.4;"></i>
+                                <i id="desc-2" class="fa fa-sort-down sort-icon" onclick="sortTable(2, 'desc')" style="line-height: 0.4;"></i>
+                                 </span>
+                                </th>
+
+                                <th>
+                                Gender
+                                <span class="sort-container"></i>
+                                <i id="asc-3" class="fa fa-sort-up sort-icon" onclick="sortTable(3, 'asc')" style="line-height: 0.4;"></i>
+                                <i id="desc-3" class="fa fa-sort-down sort-icon" onclick="sortTable(3, 'desc')" style="line-height: 0.4;"></i>
+                                 </span>
+                                </th>
+                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="TableBody">

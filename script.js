@@ -13,6 +13,16 @@ let searchInput = document.getElementById("SearchInput");
 let editingRow = null;
 let sortDirections = {};
 
+
+function isEmailDuplicate(email) {
+    const rows = Array.from(userTableBody.rows);
+
+    return rows.some(row => {
+        const existingEmail = row.cells[1].innerText.trim().toLowerCase();
+        return existingEmail === email.trim().toLowerCase();
+    });
+}
+
 /* GET SELECTED GENDER */
 
 function getSelectedGender() {
@@ -56,6 +66,12 @@ function validateForm() {
         return false;
     }
 
+    //Prevent duplicate (only for new records)
+    if (editingRow === null && isEmailDuplicate(emailAddressInput.value)) {
+        alert("Email already exists!");
+        return false;
+    }
+
     return true;
 }
 
@@ -85,6 +101,12 @@ function loadGeneratedUser() {
     const users = JSON.parse(data);
 
     users.forEach(user => {
+        //Skip duplicates
+        if (isEmailDuplicate(user.email)) {
+            console.log("Skipped duplicate:", user.email);
+            return;
+        }
+
         fullNameInput.value = user.name;
         emailAddressInput.value = user.email;
         phoneNumberInput.value = user.phone;
@@ -163,6 +185,20 @@ function startEdit(row) {
 /* UPDATE */
 
 function updateRecord() {
+     const newEmail = emailAddressInput.value;
+
+    const rows = Array.from(userTableBody.rows);
+
+    const isDuplicate = rows.some(row => {
+        if (row === editingRow) return false;
+        return row.cells[1].innerText.trim().toLowerCase() === newEmail.toLowerCase();
+    });
+
+    if (isDuplicate) {
+        alert("Email already exists!");
+        return;
+    }
+
     editingRow.cells[0].innerText = fullNameInput.value;
     editingRow.cells[1].innerText = emailAddressInput.value;
     editingRow.cells[2].innerText = phoneNumberInput.value;
@@ -210,27 +246,39 @@ searchInput.addEventListener("input", function () {
 
 /* SORT */
 
-function sortTable(columnIndex) {
-    sortDirections[columnIndex] = !sortDirections[columnIndex];
-    const direction = sortDirections[columnIndex] ? 1 : -1;
+function sortTable(columnIndex, order) {
+  const direction = order === "asc" ? 1 : -1;
 
-    const rowsArray = Array.from(userTableBody.rows);
+  const tbody = document.getElementById("TableBody");
+  const rowsArray = Array.from(tbody.rows);
 
-    rowsArray.sort((a, b) => {
-        let valA = a.cells[columnIndex].innerText.trim().toLowerCase();
-        let valB = b.cells[columnIndex].innerText.trim().toLowerCase();
+  rowsArray.sort((a, b) => {
+    let valA = a.cells[columnIndex].innerText.trim().toLowerCase();
+    let valB = b.cells[columnIndex].innerText.trim().toLowerCase();
 
-        if (!isNaN(valA) && !isNaN(valB)) {
-            return (valA - valB) * direction;
-        }
+    if (!isNaN(valA) && !isNaN(valB)) {
+      return (valA - valB) * direction;
+    }
 
-        return valA.localeCompare(valB) * direction;
-    });
+    return valA.localeCompare(valB) * direction;
+  });
 
-    userTableBody.innerHTML = "";
-    rowsArray.forEach(row => userTableBody.appendChild(row));
+  tbody.innerHTML = "";
+  rowsArray.forEach(row => tbody.appendChild(row));
 
-    saveToLocalStorage();
+  highlightArrow(columnIndex, order);
+}
+
+function highlightArrow(columnIndex, order) {
+  // reset all arrows
+  document.querySelectorAll(".sort-icon").forEach(icon => {
+    icon.classList.remove("active-sort");
+  });
+
+  // highlight selected arrow
+  document
+    .getElementById(`${order}-${columnIndex}`)
+    .classList.add("active-sort");
 }
 
 

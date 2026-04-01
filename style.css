@@ -99,6 +99,7 @@ button:hover
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #ccc;
+    border-radius: 10px;
 }
 table
 {
@@ -116,33 +117,39 @@ th, td
     top: 0;
     white-space: nowrap; 
 }
-tr{
-  text-align: left;  
-}
+
 th
-{
-    background: white;   
+{ 
     z-index: 2; 
-}
-.sortbtn
-{
     text-align: left;
     background: white;  
     color: black;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
     font-size: medium;
-    
+    padding: 20px;
 }
-.sortbtn:hover
-{
-    background:none;
-}
-#ActionTh{
-    text-align: center;
+.sort-container {
+  display: inline-flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 
+.sort-icon {
+  cursor: pointer;
+  margin-left: 4px;
+  color: #999;
+}
 
+.sort-icon:hover {
+  color: #000;
+}
+
+.active-sort {
+  color: #1e0ce8;
+  font-weight: bold;
+}
 .EditingRow
 {
     background:#fff3cd;
