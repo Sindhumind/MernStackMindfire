@@ -102,10 +102,10 @@ function loadGeneratedUser() {
 
     users.forEach(user => {
         //Skip duplicates
-        if (isEmailDuplicate(user.email)) {
-            console.log("Skipped duplicate:", user.email);
-            return;
-        }
+        // if (isEmailDuplicate(user.email)) {
+        //     console.log("Skipped duplicate:", user.email);
+        //     return;
+        // }
 
         fullNameInput.value = user.name;
         emailAddressInput.value = user.email;
