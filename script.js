@@ -13,7 +13,7 @@ let searchInput = document.getElementById("SearchInput");
 let editingRow = null;
 let sortDirections = {};
 
-
+/* TO CHECK EMAIL IS ALREADY EXIST OR NOT */
 function isEmailDuplicate(email) {
     const rows = Array.from(userTableBody.rows);
 
@@ -90,35 +90,6 @@ function loadFromLocalStorage() {
         const rows = userTableBody.querySelectorAll("tr");
         rows.forEach(row => attachRowEvents(row));
     }
-}
-
-/* LOAD AI USERS */
-
-function loadGeneratedUser() {
-    const data = localStorage.getItem("newUser");
-    if (!data) return;
-
-    const users = JSON.parse(data);
-
-    users.forEach(user => {
-        //Skip duplicates
-        // if (isEmailDuplicate(user.email)) {
-        //     console.log("Skipped duplicate:", user.email);
-        //     return;
-        // }
-
-        fullNameInput.value = user.name;
-        emailAddressInput.value = user.email;
-        phoneNumberInput.value = user.phone;
-
-        genderInput.forEach(radio => {
-            radio.checked = radio.value === user.gender;
-        });
-
-        addRecord();
-    });
-
-    localStorage.removeItem("newUser");
 }
 
 window.onload = function () {
@@ -279,54 +250,4 @@ function highlightArrow(columnIndex, order) {
   document
     .getElementById(`${order}-${columnIndex}`)
     .classList.add("active-sort");
-}
-
-
-/* AI GENERATE USERS */
-
-
-async function generateAIData() {
-    try {
-        const response = await fetch("https://api.cohere.ai/v1/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer cKGgiPFn8mez4qOghJYjS1td7B3h4Wpry0yNqbjm" 
-            },
-            body: JSON.stringify({
-                model: "command-nightly", 
-                message: "Generate an array of 10 user objects in valid JSON format. Each user must include: name, email, phone, and gender. Ensure phone numbers follow valid Indian format (e.g., +91XXXXXXXXXX or 10-digit mobile numbers starting with 6–9). Use realistic data. Return only valid JSON without any explanation or extra text.",
-                max_tokens: 1000 
-            })
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.json();
-            throw new Error(`API Error: ${response.status} - ${errorBody.message || 'Unknown'}`);
-        }
-
-        const data = await response.json();
-        
-        const rawText = data.text;
-
-        const jsonString = extractJSON(rawText);
-        const users = JSON.parse(jsonString);
-
-        localStorage.setItem("newUser", JSON.stringify(users));
-        window.location.href = "index.html";
-
-    } catch (error) {
-        console.error("Integration Error:", error);
-        alert("Error: " + error.message);
-    }
-}
-
-// Utility function to strip any non-JSON text the AI might provide
-function extractJSON(str) {
-    const firstBracket = str.indexOf('[');
-    const lastBracket = str.lastIndexOf(']');
-    if (firstBracket !== -1 && lastBracket !== -1) {
-        return str.substring(firstBracket, lastBracket + 1);
-    }
-    return str;
 }
