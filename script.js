@@ -1,253 +1,182 @@
-/* ELEMENTS= */
-let registrationForm = document.getElementById("RegistrationForm");
-let fullNameInput = document.getElementById("FullName");
-let emailAddressInput = document.getElementById("EmailAddress");
-let phoneNumberInput = document.getElementById("PhoneNumber");
-let genderInput = document.getElementsByName("gender");
+// ELEMENTS
+var form = document.getElementById("RegistrationForm");
+var nameInput = document.getElementById("FullName");
+var emailInput = document.getElementById("EmailAddress");
+var phoneInput = document.getElementById("PhoneNumber");
+var tableBody = document.getElementById("TableBody");
 
-let userTableBody = document.getElementById("TableBody");
-let submitButton = document.getElementById("SubmitButton");
+var editRow = null;
 
-let searchInput = document.getElementById("SearchInput");
-
-let editingRow = null;
-let sortDirections = {};
-
-/* TO CHECK EMAIL IS ALREADY EXIST OR NOT */
-function isEmailDuplicate(email) {
-    const rows = Array.from(userTableBody.rows);
-
-    return rows.some(row => {
-        const existingEmail = row.cells[1].innerText.trim().toLowerCase();
-        return existingEmail === email.trim().toLowerCase();
-    });
-}
-
-/* GET SELECTED GENDER */
-
-function getSelectedGender() {
-    const selected = document.querySelector('input[name="gender"]:checked');
-    return selected ? selected.value : "";
-}
-
-/* FORM SUBMIT */
-
-registrationForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    if (!validateForm()) return;
-
-    if (editingRow === null) {
-        addRecord();
-    } else {
-        updateRecord();
-    }
-
-    clearForm();
-});
-
-/* VALIDATION */
-
-function validateForm() {
-    if (
-        fullNameInput.value === "" ||
-        emailAddressInput.value === "" ||
-        phoneNumberInput.value === "" ||
-        getSelectedGender() === ""
-    ) {
-        alert("Please fill all fields");
-        return false;
-    }
-
-    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(emailAddressInput.value)) {
-        alert("Invalid email");
-        return false;
-    }
-
-    //Prevent duplicate (only for new records)
-    if (editingRow === null && isEmailDuplicate(emailAddressInput.value)) {
-        alert("Email already exists!");
-        return false;
-    }
-
-    return true;
-}
-
-/* LOCAL STORAGE */
-
-function saveToLocalStorage() {
-    localStorage.setItem("userTableBody", userTableBody.innerHTML);
-}
-
-function loadFromLocalStorage() {
-    const data = localStorage.getItem("userTableBody");
-
-    if (data) {
-        userTableBody.innerHTML = data;
-
-        const rows = userTableBody.querySelectorAll("tr");
-        rows.forEach(row => attachRowEvents(row));
-    }
-}
-
+//to load data once page loaded
 window.onload = function () {
-    loadFromLocalStorage();
-    loadGeneratedUser();
-    clearForm();
+    loadData();
 };
 
-/* ADD RECORD */
+// FORM SUBMIT
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-function addRecord() {
-    const row = userTableBody.insertRow();
-
-    row.innerHTML = `
-        <td>${fullNameInput.value}</td>
-        <td>${emailAddressInput.value}</td>
-        <td>${phoneNumberInput.value}</td>
-        <td>${getSelectedGender()}</td>
-        <td class="ActionColumn">
-            <button class="ActionButton EditButton" title="Edit">
-                <i class="fa-solid fa-pen"></i>
-            </button>
-            <button class="ActionButton DeleteButton" title="Delete">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </td>
-    `;
-
-    attachRowEvents(row);
-    saveToLocalStorage();
-}
-
-/* EVENTS */
-
-function attachRowEvents(row) {
-    row.querySelector(".EditButton").onclick = () => startEdit(row);
-    row.querySelector(".DeleteButton").onclick = () => deleteRecord(row);
-}
-
-/* EDIT */
-
-function startEdit(row) {
-
-   // Remove editing class from previous row
-    if (editingRow) {
-        editingRow.classList.remove("EditingRow");
-    }
-
-    editingRow = row;
-    fullNameInput.value = row.cells[0].innerText;
-    emailAddressInput.value = row.cells[1].innerText;
-    phoneNumberInput.value = row.cells[2].innerText;
-
-    const genderValue = row.cells[3].innerText;
-
-    genderInput.forEach(radio => {
-        radio.checked = radio.value === genderValue;
-    });
-
-    submitButton.innerText = "Update";
-    row.classList.add("EditingRow");
-}
-
-/* UPDATE */
-
-function updateRecord() {
-     const newEmail = emailAddressInput.value;
-
-    const rows = Array.from(userTableBody.rows);
-
-    const isDuplicate = rows.some(row => {
-        if (row === editingRow) return false;
-        return row.cells[1].innerText.trim().toLowerCase() === newEmail.toLowerCase();
-    });
-
-    if (isDuplicate) {
-        alert("Email already exists!");
+    if (nameInput.value == "" || emailInput.value == "" || phoneInput.value == "") {
+        alert("Fill all fields");
         return;
     }
 
-    editingRow.cells[0].innerText = fullNameInput.value;
-    editingRow.cells[1].innerText = emailAddressInput.value;
-    editingRow.cells[2].innerText = phoneNumberInput.value;
-    editingRow.cells[3].innerText = getSelectedGender();
-
-    editingRow.classList.remove("EditingRow");
-
-    editingRow = null;
-
-    submitButton.innerText = "Submit";
-
-    saveToLocalStorage();
-}
-
-/* DELETE */
-
-function deleteRecord(row) {
-    if (confirm("Delete this record?")) {
-        row.remove();
-        saveToLocalStorage();
+    var gender = getGender();
+    if (gender == "") {
+        alert("Select gender");
+        return;
     }
-}
 
-/* CLEAR */
+    if (editRow == null && isDuplicate(emailInput.value)) {
+        alert("Email exists");
+        return;
+    }
 
-function clearForm() {
-    fullNameInput.value = "";
-    emailAddressInput.value = "";
-    phoneNumberInput.value = "";
+    if (editRow == null) {
+        addRow();
+    } else {
+        updateRow();
+    }
 
-    genderInput.forEach(r => (r.checked = false));
-}
-
-/* SEARCH  */
-
-searchInput.addEventListener("input", function () {
-    const value = searchInput.value.toLowerCase();
-
-    Array.from(userTableBody.rows).forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(value)
-            ? ""
-            : "none";
-    });
+    saveData();
+    clearForm();
 });
 
-/* SORT */
+// GET GENDER
+function getGender() {
+    var radios = document.getElementsByName("gender");
 
-function sortTable(columnIndex, order) {
-  const direction = order === "asc" ? 1 : -1;
-
-  const tbody = document.getElementById("TableBody");
-  const rowsArray = Array.from(tbody.rows);
-
-  rowsArray.sort((a, b) => {
-    let valA = a.cells[columnIndex].innerText.trim().toLowerCase();
-    let valB = b.cells[columnIndex].innerText.trim().toLowerCase();
-
-    if (!isNaN(valA) && !isNaN(valB)) {
-      return (valA - valB) * direction;
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            return radios[i].value;
+        }
     }
-
-    return valA.localeCompare(valB) * direction;
-  });
-
-  tbody.innerHTML = "";
-  rowsArray.forEach(row => tbody.appendChild(row));
-
-  highlightArrow(columnIndex, order);
+    return "";
 }
 
-function highlightArrow(columnIndex, order) {
-  // reset all arrows
-  document.querySelectorAll(".sort-icon").forEach(icon => {
-    icon.classList.remove("active-sort");
-  });
+// DUPLICATE CHECK
+function isDuplicate(email) {
+    var rows = tableBody.rows;
 
-  // highlight selected arrow
-  document
-    .getElementById(`${order}-${columnIndex}`)
-    .classList.add("active-sort");
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i].cells[1].innerText == email) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// ADD ROW
+function addRow() {
+    var row = tableBody.insertRow();
+
+    row.innerHTML =
+        "<td>" + nameInput.value + "</td>" +
+        "<td>" + emailInput.value + "</td>" +
+        "<td>" + phoneInput.value + "</td>" +
+        "<td>" + getGender() + "</td>" +
+        "<td>" +
+        "<button class='ActionButton EditButton' onclick='editData(this)' title='Edit'>" +
+                "<i class='fa-solid fa-pen'></i>" +
+            "</button>" +
+            "<button class='ActionButton DeleteButton' onclick='deleteData(this)' title='Delete'>" +
+                "<i class='fa-solid fa-trash'></i>" +
+            "</button>" +
+        "</td>";
+}
+
+// EDIT
+function editData(btn) {
+    var row = btn.parentNode.parentNode;
+    editRow = row;
+
+    nameInput.value = row.cells[0].innerText;
+    emailInput.value = row.cells[1].innerText;
+    phoneInput.value = row.cells[2].innerText;
+
+    var gender = row.cells[3].innerText;
+    var radios = document.getElementsByName("gender");
+
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].checked = (radios[i].value == gender);
+    }
+}
+
+// UPDATE
+function updateRow() {
+    editRow.cells[0].innerText = nameInput.value;
+    editRow.cells[1].innerText = emailInput.value;
+    editRow.cells[2].innerText = phoneInput.value;
+    editRow.cells[3].innerText = getGender();
+
+    editRow = null;
+}
+
+// DELETE
+function deleteData(btn) {
+    var row = btn.parentNode.parentNode;
+
+    if (confirm("Delete record?")) {
+        row.remove();
+        saveData();
+    }
+}
+
+// CLEAR
+function clearForm() {
+    nameInput.value = "";
+    emailInput.value = "";
+    phoneInput.value = "";
+
+    var radios = document.getElementsByName("gender");
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].checked = false;
+    }
+}
+
+
+// LOCAL STORAGE
+
+
+function saveData() {
+    localStorage.setItem("tableData", tableBody.innerHTML);
+}
+
+function loadData() {
+    var data = localStorage.getItem("tableData");
+
+    if (data) {
+        tableBody.innerHTML = data;
+    }
+}
+
+
+// SORTING
+
+function sortTable(colIndex, order) {
+    var rows = tableBody.rows;
+    var switching = true;
+
+    while (switching) {
+        switching = false;
+
+        for (var i = 0; i < rows.length - 1; i++) {
+            var x = rows[i].cells[colIndex].innerText.toLowerCase();
+            var y = rows[i + 1].cells[colIndex].innerText.toLowerCase();
+
+            var shouldSwitch = false;
+
+            if (order == "asc") {
+                if (x > y) shouldSwitch = true;
+            } else {
+                if (x < y) shouldSwitch = true;
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                break;
+            }
+        }
+    }
 }
