@@ -14,29 +14,29 @@
 
     </header>
     <pre id="output"></pre>
-        <div id = "MainContainer">
+        <div id = "main-container">
 
         <!-- Form Section -->
-            <div id = "RegForm">
-                <form id="RegistrationForm">
+            <div id = "reg-form-main">
+                <form id="registration-form">
                     <h2>Registration Form</h2>
 
                     <!-- <div class="FormGroup">-->
                         <label>Full Name</label>
-                        <input type="text" id="FullName" class = "InputFields">
+                        <input type="text" id="full-name" class = "input-fields">
                     <!--</div>-->
 
                     <!--<div class="FormGroup">-->
                         <label>Email</label>
-                        <input type="email" id="EmailAddress" class = "InputFields">
+                        <input type="email" id="email-address" class = "input-fields">
                     <!--</div>-->
 
                     <!--<div class="FormGroup">-->
                         <label>Phone</label>
-                        <input type="phone" id="PhoneNumber" pattern="[0-9+]+" required class = "InputFields">
+                        <input type="phone" id="phone-number" pattern="[0-9+]+" required class = "input-fields">
                     <!--</div>-->
 
-                    <div class="FormGroup">
+                    <div class="form-group">
                         <label>Gender:</label>
                         <label>
                             <input type="radio" name="gender" value="Male"> Male
@@ -51,16 +51,16 @@
                         </label>
                    </div>
 
-                    <button type="submit" id ="SubmitButton">
+                    <button type="submit" id ="submit-button">
                     Submit
                     </button>
                 </form>
             </div>
  <!-- Table Section -->
-            <div id="RegTable">
+            <div id="reg-table">
                 <h2>Registered Users</h2>
 
-                <input type="text" id="SearchInput" placeholder="Search...">
+                <input type="text" id="search-input" placeholder="Search...">
                 <div class="table-container">
                     <table>
                         <thead>
@@ -96,10 +96,10 @@
                                 <i id="desc-3" class="fa fa-sort-down sort-icon" onclick="sortTable(3, 'desc')" style="line-height: 0.4;"></i>
                                  </span>
                                 </th>
-                                 <th>Actions</th>
+                                 <th id = "action-column">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="TableBody">
+                        <tbody id="table-body">
                         </tbody>
                     </table>
                 </div>

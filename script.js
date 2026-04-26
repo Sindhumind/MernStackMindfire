@@ -1,11 +1,12 @@
 // ELEMENTS
-var form = document.getElementById("RegistrationForm");
-var nameInput = document.getElementById("FullName");
-var emailInput = document.getElementById("EmailAddress");
-var phoneInput = document.getElementById("PhoneNumber");
-var tableBody = document.getElementById("TableBody");
+const form = document.getElementById("registration-form");
+const nameInput = document.getElementById("full-name");
+const emailInput = document.getElementById("email-address");
+const phoneInput = document.getElementById("phone-number");
+const tableBody = document.getElementById("table-body");
 
-var editRow = null;
+const editRow = null;
+const searchInput = document.getElementById("search-input");
 
 //to load data once page loaded
 window.onload = function () {
@@ -21,7 +22,7 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
-    var gender = getGender();
+    let gender = getGender();
     if (gender == "") {
         alert("Select gender");
         return;
@@ -44,9 +45,9 @@ form.addEventListener("submit", function (e) {
 
 // GET GENDER
 function getGender() {
-    var radios = document.getElementsByName("gender");
+    const radios = document.getElementsByName("gender");
 
-    for (var i = 0; i < radios.length; i++) {
+    for (let i = 0; i < radios.length; i++) {
         if (radios[i].checked) {
             return radios[i].value;
         }
@@ -56,9 +57,9 @@ function getGender() {
 
 // DUPLICATE CHECK
 function isDuplicate(email) {
-    var rows = tableBody.rows;
+    let rows = tableBody.rows;
 
-    for (var i = 0; i < rows.length; i++) {
+    for (let i = 0; i < rows.length; i++) {
         if (rows[i].cells[1].innerText == email) {
             return true;
         }
@@ -68,7 +69,7 @@ function isDuplicate(email) {
 
 // ADD ROW
 function addRow() {
-    var row = tableBody.insertRow();
+    let row = tableBody.insertRow();
 
     row.innerHTML =
         "<td>" + nameInput.value + "</td>" +
@@ -76,10 +77,10 @@ function addRow() {
         "<td>" + phoneInput.value + "</td>" +
         "<td>" + getGender() + "</td>" +
         "<td>" +
-        "<button class='ActionButton EditButton' onclick='editData(this)' title='Edit'>" +
+        "<button class='action-button edit-button' onclick='editData(this)' title='Edit'>" +
                 "<i class='fa-solid fa-pen'></i>" +
             "</button>" +
-            "<button class='ActionButton DeleteButton' onclick='deleteData(this)' title='Delete'>" +
+            "<button class='action-button delete-button' onclick='deleteData(this)' title='Delete'>" +
                 "<i class='fa-solid fa-trash'></i>" +
             "</button>" +
         "</td>";
@@ -87,17 +88,17 @@ function addRow() {
 
 // EDIT
 function editData(btn) {
-    var row = btn.parentNode.parentNode;
+    let row = btn.parentNode.parentNode;
     editRow = row;
 
     nameInput.value = row.cells[0].innerText;
     emailInput.value = row.cells[1].innerText;
     phoneInput.value = row.cells[2].innerText;
 
-    var gender = row.cells[3].innerText;
-    var radios = document.getElementsByName("gender");
+    let gender = row.cells[3].innerText;
+    let radios = document.getElementsByName("gender");
 
-    for (var i = 0; i < radios.length; i++) {
+    for (let i = 0; i < radios.length; i++) {
         radios[i].checked = (radios[i].value == gender);
     }
 }
@@ -114,7 +115,7 @@ function updateRow() {
 
 // DELETE
 function deleteData(btn) {
-    var row = btn.parentNode.parentNode;
+    let row = btn.parentNode.parentNode;
 
     if (confirm("Delete record?")) {
         row.remove();
@@ -128,8 +129,8 @@ function clearForm() {
     emailInput.value = "";
     phoneInput.value = "";
 
-    var radios = document.getElementsByName("gender");
-    for (var i = 0; i < radios.length; i++) {
+    let radios = document.getElementsByName("gender");
+    for (let i = 0; i < radios.length; i++) {
         radios[i].checked = false;
     }
 }
@@ -137,34 +138,102 @@ function clearForm() {
 
 // LOCAL STORAGE
 
+function saveData() {
+  const rows = tableBody.rows;
+  const data = [];
 
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].cells;
+
+    const rowData = {
+      name: cells[0].innerText,
+      email: cells[1].innerText,
+      phone: cells[2].innerText,
+      gender: cells[3].innerText
+    };
+
+    data.push(rowData);
+  }
+
+  localStorage.setItem("users", JSON.stringify(data));
+}
+
+function loadData() {
+  const data = JSON.parse(localStorage.getItem("users")) || [];
+
+  tableBody.innerHTML = "";
+
+  for (let i = 0; i < data.length; i++) {
+    const row = `
+      <tr>
+        <td>${data[i].name}</td>
+        <td>${data[i].email}</td>
+        <td>${data[i].phone}</td>
+        <td>${data[i].gender}</td>
+        <td>
+          <button onclick="editData(this)">Edit</button>
+          <button onclick="deleteData(this)">Delete</button>
+        </td>
+      </tr>
+    `;
+
+    tableBody.innerHTML += row;
+  }
+}
+
+/*
 function saveData() {
     localStorage.setItem("tableData", tableBody.innerHTML);
 }
 
 function loadData() {
-    var data = localStorage.getItem("tableData");
+    let data = localStorage.getItem("tableData");
 
     if (data) {
         tableBody.innerHTML = data;
     }
-}
+}*/
+
+//SEARCH 
+
+searchInput.addEventListener("input", function () {
+
+  // 1. Get input value
+  const value = searchInput.value.toLowerCase();
+
+  // 2. Get all rows
+  const rows = tableBody.rows;
+
+  // 3. Loop through rows
+  for (let i = 0; i < rows.length; i++) {
+
+    const rowText = rows[i].innerText.toLowerCase();
+
+    // 4. Check match
+    if (rowText.includes(value)) {
+      rows[i].style.display = "";      // show
+    } else {
+      rows[i].style.display = "none";  // hide
+    }
+  }
+
+});
 
 
 // SORTING
 
 function sortTable(colIndex, order) {
-    var rows = tableBody.rows;
-    var switching = true;
+    let rows = tableBody.rows;
+    let switching = true;
 
     while (switching) {
         switching = false;
 
-        for (var i = 0; i < rows.length - 1; i++) {
-            var x = rows[i].cells[colIndex].innerText.toLowerCase();
-            var y = rows[i + 1].cells[colIndex].innerText.toLowerCase();
+        for (let i = 0; i < rows.length - 1; i++) {
+            let x = rows[i].cells[colIndex].innerText.toLowerCase();
+            let y = rows[i + 1].cells[colIndex].innerText.toLowerCase();
 
-            var shouldSwitch = false;
+            let shouldSwitch = false;
 
             if (order == "asc") {
                 if (x > y) shouldSwitch = true;

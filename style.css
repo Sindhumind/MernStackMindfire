@@ -1,33 +1,30 @@
-* {
-    box-sizing: border-box;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    width: 100%;
 }
 
-Header {
+header {
     background-color: #deec7b;
     color: rgb(11, 15, 7);
     padding: 10px;
     text-align: center;
     
 }
-.AIBtn{
-margin: 10px;
-}
 
-#MainContainer
+#main-container
 {
     display:flex;
     gap:30px;
     margin: 1% 1% 0;
+    flex-direction: row;
 }
 
 /* FORM */
 
-#RegForm
+#reg-form-main
 {
     width:35%;
     background:white;
@@ -36,7 +33,11 @@ margin: 10px;
     box-shadow:0 2px 6px rgba(0,0,0,0.1);
     margin-left: 5px;
 }
-
+#registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 h2{
     margin-top: 0; 
 }
@@ -48,13 +49,15 @@ label
     margin-bottom:5px;
     
 }
+.input-fields {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-.InputFields{
-    width:90%;
-    padding:8px;
-    border:1px solid #ccc;
-    border-radius:4px;
-    margin-bottom: 10px;
+.input-fields:focus {
+  border-color: blue;
+  outline: none;
 }
 
 button
@@ -66,27 +69,31 @@ button
     border-radius:4px;
     cursor:pointer;
     margin-top: 10px;
-    display:block ;
+    display:inline-block ;
 }
-
 
 button:hover
 {
     background:#0056b3;
 }
+.form-group{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 
-#SearchInput{
-   margin: 10px 10px 10px 0; 
+#search-input {
+   width: 100%;
    min-height: 30px;
-    border:1px solid #ccc;
-    border-radius:4px;
-   
-   
+   padding: 8px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   margin-bottom: 10px;
 }
 
 /* TABLE */
 
-#RegTable
+#reg-table
 {
     width:65%;
     background:white;
@@ -150,14 +157,14 @@ th
   color: #1e0ce8;
   font-weight: bold;
 }
-.EditingRow
+.editing-row
 {
     background:#fff3cd;
 }
-.ActionColumn{
+.action-column{
     text-align: center;
 }
-.ActionButton
+.action-button
 {
     padding:6px 10px;
     border:none;
@@ -167,13 +174,13 @@ th
     margin-right: 5px;
 }
 
-.EditButton
+.edit-button
 {
     background:#28a745;
     color:white;
 }
 
-.DeleteButton
+.delete-button
 {
     background:#dc3545;
     color:white;
@@ -184,11 +191,11 @@ th
 @media screen and ( max-width:900px ) {
 
 
-Header {
+header {
     text-align: left;
 }
 
-#MainContainer
+#main-container
 {
     display:block;
     margin: 10px;
@@ -196,7 +203,7 @@ Header {
 
 /* FORM */
 
-#RegForm
+#reg-form-main
 {
     width:96%;
     background:white;
@@ -209,18 +216,14 @@ form{
     margin-left: 5px;
 }
 
-.InputFields{
-    width:97%;
-}
-
-.FormGroup label{
+.form-group label{
  display:inline;
 
 }
 
 /* TABLE */
 
-#RegTable
+#reg-table
 {
     width:96%;
     padding:5px;
